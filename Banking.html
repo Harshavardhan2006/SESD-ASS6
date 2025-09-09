@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Banking App - Factory Pattern</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    h1 {
+      color: #1976d2;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .savings-btn { background: #4caf50; color: white; }
+    .current-btn { background: #ff9800; color: white; }
+    .loan-btn { background: #f44336; color: white; }
+    .log {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .log p {
+      margin: 8px 0;
+      padding: 8px;
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Banking App (Factory Demo)</h1>
+
+  <button class="savings-btn" onclick="createSavings()">Create Savings Account</button>
+  <button class="current-btn" onclick="createCurrent()">Create Current Account</button>
+  <button class="loan-btn" onclick="createLoan()">Create Loan Account</button>
+
+  <div class="log" id="log"></div>
+
+  <script>
+    // Factory function for accounts
+    function AccountFactory(type, name, balance = 0) {
+      switch(type) {
+        case "SavingsAccount":
+          return {
+            type: "Savings Account",
+            name,
+            balance,
+            deposit(amount) {
+              this.balance += amount;
+              return `${this.name} deposited ₹${amount}. Balance: ₹${this.balance}`;
+            },
+            withdraw(amount) {
+              if(amount > this.balance) return "Insufficient balance!";
+              this.balance -= amount;
+              return `${this.name} withdrew ₹${amount}. Balance: ₹${this.balance}`;
+            }
+          };
+        case "CurrentAccount":
+          return {
+            type: "Current Account",
+            name,
+            balance,
+            overdraftLimit: 5000,
+            withdraw(amount) {
+              if(amount > this.balance + this.overdraftLimit) return "Overdraft limit exceeded!";
+              this.balance -= amount;
+              return `${this.name} withdrew ₹${amount}. Balance: ₹${this.balance}`;
+            },
+            deposit(amount) {
+              this.balance += amount;
+              return `${this.name} deposited ₹${amount}. Balance: ₹${this.balance}`;
+            }
+          };
+        case "LoanAccount":
+          return {
+            type: "Loan Account",
+            name,
+            balance,
+            repay(amount) {
+              this.balance -= amount;
+              if(this.balance < 0) this.balance = 0;
+              return `${this.name} repaid ₹${amount}. Remaining Loan: ₹${this.balance}`;
+            },
+            borrow(amount) {
+              this.balance += amount;
+              return `${this.name} borrowed ₹${amount}. Total Loan: ₹${this.balance}`;
+            }
+          };
+        default:
+          throw new Error("Invalid account type!");
+      }
+    }
+
+    const logDiv = document.getElementById("log");
+
+    function logMessage(msg) {
+      const p = document.createElement("p");
+      p.textContent = msg;
+      logDiv.appendChild(p);
+    }
+
+    function createSavings() {
+      const savings = AccountFactory("SavingsAccount", "Alice", 1000);
+      logMessage(savings.deposit(500));
+      logMessage(savings.withdraw(200));
+    }
+
+    function createCurrent() {
+      const current = AccountFactory("CurrentAccount", "Bob", 2000);
+      logMessage(current.withdraw(6000)); // within overdraft limit
+      logMessage(current.deposit(3000));
+    }
+
+    function createLoan() {
+      const loan = AccountFactory("LoanAccount", "Charlie", 10000);
+      logMessage(loan.repay(3000));
+      logMessage(loan.borrow(2000));
+    }
+  </script>
+</body>
+</html>
