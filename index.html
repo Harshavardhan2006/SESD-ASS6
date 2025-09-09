@@ -2,197 +2,105 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Food Delivery App</title>
+  <title>Food Delivery Factory Example</title>
   <style>
     body {
-      margin: 0;
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
-    }
-    header {
-      background: #ff5722;
-      color: white;
-      padding: 15px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin-left: 15px;
-      font-weight: bold;
-    }
-    .container {
-      display: flex;
+      background: #f4f6f9;
       padding: 20px;
     }
-    .food-items {
-      flex: 3;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+    h1 {
+      color: #ff5722;
     }
-    .food-card {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 10px;
-      text-align: center;
-    }
-    .food-card img {
-      width: 100%;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .food-card h3 {
-      margin: 10px 0;
-    }
-    .food-card button {
-      background: #ff5722;
-      color: white;
+    button {
+      padding: 10px 15px;
+      margin: 5px;
       border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
+      border-radius: 6px;
+      font-weight: bold;
       cursor: pointer;
     }
-    .food-card button:hover {
-      background: #e64a19;
-    }
-    .cart {
-      flex: 1;
-      margin-left: 20px;
-      background: white;
+    .customer-btn { background: #4caf50; color: white; }
+    .partner-btn { background: #1976d2; color: white; }
+    .restaurant-btn { background: #ff9800; color: white; }
+    .log {
+      margin-top: 20px;
       padding: 15px;
+      background: white;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    .cart h2 {
-      margin-top: 0;
-    }
-    .cart ul {
-      list-style: none;
-      padding: 0;
-    }
-    .cart ul li {
+    .log p {
       margin: 8px 0;
-      display: flex;
-      justify-content: space-between;
-    }
-    .checkout {
-      margin-top: 15px;
-      background: #4caf50;
-      color: white;
-      border: none;
-      padding: 10px;
-      width: 100%;
+      padding: 8px;
+      background: #f1f1f1;
       border-radius: 5px;
-      cursor: pointer;
-    }
-    .checkout:hover {
-      background: #388e3c;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>FoodieExpress</h1>
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Menu</a>
-      <a href="#">Contact</a>
-    </nav>
-  </header>
+  <h1>Food Delivery App (Factory Demo)</h1>
 
-  <div class="container">
-    <!-- Food Items -->
-    <div class="food-items" id="food-list">
-      <div class="food-card">
-        <img src="https://source.unsplash.com/400x300/?pizza" alt="Pizza">
-        <h3>Pizza</h3>
-        <p>₹250</p>
-        <button onclick="addToCart('Pizza',250)">Add to Cart</button>
-      </div>
-      <div class="food-card">
-        <img src="https://source.unsplash.com/400x300/?burger" alt="Burger">
-        <h3>Burger</h3>
-        <p>₹150</p>
-        <button onclick="addToCart('Burger',150)">Add to Cart</button>
-      </div>
-      <div class="food-card">
-        <img src="https://source.unsplash.com/400x300/?pasta" alt="Pasta">
-        <h3>Pasta</h3>
-        <p>₹200</p>
-        <button onclick="addToCart('Pasta',200)">Add to Cart</button>
-      </div>
-      <div class="food-card">
-        <img src="https://source.unsplash.com/400x300/?biryani" alt="Biryani">
-        <h3>Biryani</h3>
-        <p>₹180</p>
-        <button onclick="addToCart('Biryani',180)">Add to Cart</button>
-      </div>
-    </div>
+  <button class="customer-btn" onclick="createCustomer()">Create Customer</button>
+  <button class="partner-btn" onclick="createPartner()">Create Delivery Partner</button>
+  <button class="restaurant-btn" onclick="createRestaurant()">Create Restaurant</button>
 
-    <!-- Cart -->
-    <div class="cart">
-      <h2>Cart</h2>
-      <ul id="cart-list"></ul>
-      <h3>Total: ₹<span id="total">0</span></h3>
-      <button class="checkout" onclick="checkout()">Checkout</button>
-    </div>
-  </div>
+  <div class="log" id="log"></div>
 
   <script>
-    let cart = [];
-    let total = 0;
-
-    function addToCart(item, price) {
-      cart.push({item, price});
-      total += price;
-      updateCart();
-    }
-
-    function updateCart() {
-      const cartList = document.getElementById('cart-list');
-      const totalSpan = document.getElementById('total');
-      cartList.innerHTML = '';
-      cart.forEach((c, i) => {
-        const li = document.createElement('li');
-        li.textContent = c.item + " - ₹" + c.price;
-        const removeBtn = document.createElement('button');
-        removeBtn.textContent = "X";
-        removeBtn.style.background = "red";
-        removeBtn.style.color = "white";
-        removeBtn.style.border = "none";
-        removeBtn.style.borderRadius = "4px";
-        removeBtn.style.cursor = "pointer";
-        removeBtn.onclick = () => removeFromCart(i);
-        li.appendChild(removeBtn);
-        cartList.appendChild(li);
-      });
-      totalSpan.textContent = total;
-    }
-
-    function removeFromCart(index) {
-      total -= cart[index].price;
-      cart.splice(index, 1);
-      updateCart();
-    }
-
-    function checkout() {
-      if(cart.length === 0) {
-        alert("Your cart is empty!");
-      } else {
-        alert("Order placed successfully! Total: ₹" + total);
-        cart = [];
-        total = 0;
-        updateCart();
+    // Factory function
+    function UserFactory(type, name) {
+      switch(type) {
+        case "Customer":
+          return {
+            type: "Customer",
+            name: name,
+            placeOrder: function(food) {
+              return `${this.name} ordered ${food}.`;
+            }
+          };
+        case "DeliveryPartner":
+          return {
+            type: "Delivery Partner",
+            name: name,
+            deliver: function(order) {
+              return `${this.name} is delivering: ${order}`;
+            }
+          };
+        case "Restaurant":
+          return {
+            type: "Restaurant",
+            name: name,
+            prepareFood: function(food) {
+              return `${this.name} prepared ${food}.`;
+            }
+          };
+        default:
+          throw new Error("Invalid user type!");
       }
+    }
+
+    const logDiv = document.getElementById("log");
+
+    function logMessage(msg) {
+      const p = document.createElement("p");
+      p.textContent = msg;
+      logDiv.appendChild(p);
+    }
+
+    function createCustomer() {
+      const customer = UserFactory("Customer", "Alice");
+      logMessage(customer.placeOrder("Burger"));
+    }
+
+    function createPartner() {
+      const partner = UserFactory("DeliveryPartner", "Bob");
+      logMessage(partner.deliver("Pizza to Alice"));
+    }
+
+    function createRestaurant() {
+      const restaurant = UserFactory("Restaurant", "Spicy Bites");
+      logMessage(restaurant.prepareFood("Pasta"));
     }
   </script>
 </body>
