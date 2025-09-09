@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Food Delivery Factory</title>
+  <title>Food Delivery Factory Example</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,6 +12,17 @@
     h1 {
       color: #ff5722;
     }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .customer-btn { background: #4caf50; color: white; }
+    .partner-btn { background: #1976d2; color: white; }
+    .restaurant-btn { background: #ff9800; color: white; }
     .log {
       margin-top: 20px;
       padding: 15px;
@@ -29,7 +40,10 @@
 </head>
 <body>
   <h1>Food Delivery App (Factory Demo)</h1>
-  <button onclick="createObjects()">Create Sample Objects</button>
+
+  <button class="customer-btn" onclick="createCustomer()">Create Customer</button>
+  <button class="partner-btn" onclick="createPartner()">Create Delivery Partner</button>
+  <button class="restaurant-btn" onclick="createRestaurant()">Create Restaurant</button>
 
   <div class="log" id="log"></div>
 
@@ -66,24 +80,27 @@
       }
     }
 
-    // Example usage
-    function createObjects() {
-      const logDiv = document.getElementById("log");
-      logDiv.innerHTML = "";
+    const logDiv = document.getElementById("log");
 
+    function logMessage(msg) {
+      const p = document.createElement("p");
+      p.textContent = msg;
+      logDiv.appendChild(p);
+    }
+
+    function createCustomer() {
       const customer = UserFactory("Customer", "Alice");
+      logMessage(customer.placeOrder("Burger"));
+    }
+
+    function createPartner() {
       const partner = UserFactory("DeliveryPartner", "Bob");
+      logMessage(partner.deliver("Pizza to Alice"));
+    }
+
+    function createRestaurant() {
       const restaurant = UserFactory("Restaurant", "Spicy Bites");
-
-      const order1 = customer.placeOrder("Pizza");
-      const food1 = restaurant.prepareFood("Pizza");
-      const delivery1 = partner.deliver("Pizza to Alice");
-
-      [order1, food1, delivery1].forEach(msg => {
-        const p = document.createElement("p");
-        p.textContent = msg;
-        logDiv.appendChild(p);
-      });
+      logMessage(restaurant.prepareFood("Pasta"));
     }
   </script>
 </body>
