@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ride-Hailing App - Factory Pattern</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    h1 {
+      color: #e91e63;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .mini-btn { background: #4caf50; color: white; }
+    .sedan-btn { background: #2196f3; color: white; }
+    .suv-btn { background: #ff9800; color: white; }
+    .auto-btn { background: #9c27b0; color: white; }
+    .log {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .log p {
+      margin: 8px 0;
+      padding: 8px;
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ride-Hailing App (Factory Demo)</h1>
+
+  <button class="mini-btn" onclick="createMini()">Book Mini</button>
+  <button class="sedan-btn" onclick="createSedan()">Book Sedan</button>
+  <button class="suv-btn" onclick="createSUV()">Book SUV</button>
+  <button class="auto-btn" onclick="createAuto()">Book Auto</button>
+
+  <div class="log" id="log"></div>
+
+  <script>
+    // Ride Factory
+    function RideFactory(type) {
+      switch(type) {
+        case "Mini":
+          return {
+            type: "Mini",
+            farePerKm: 10,
+            getFare(distance) {
+              return `Ride: ${this.type}, Distance: ${distance} km, Fare: ₹${distance * this.farePerKm}`;
+            }
+          };
+        case "Sedan":
+          return {
+            type: "Sedan",
+            farePerKm: 15,
+            getFare(distance) {
+              return `Ride: ${this.type}, Distance: ${distance} km, Fare: ₹${distance * this.farePerKm}`;
+            }
+          };
+        case "SUV":
+          return {
+            type: "SUV",
+            farePerKm: 20,
+            getFare(distance) {
+              return `Ride: ${this.type}, Distance: ${distance} km, Fare: ₹${distance * this.farePerKm}`;
+            }
+          };
+        case "Auto":
+          return {
+            type: "Auto",
+            farePerKm: 8,
+            getFare(distance) {
+              return `Ride: ${this.type}, Distance: ${distance} km, Fare: ₹${distance * this.farePerKm}`;
+            }
+          };
+        default:
+          throw new Error("Invalid ride type!");
+      }
+    }
+
+    const logDiv = document.getElementById("log");
+
+    function logMessage(msg) {
+      const p = document.createElement("p");
+      p.textContent = msg;
+      logDiv.appendChild(p);
+    }
+
+    // Button functions
+    function createMini() {
+      const mini = RideFactory("Mini");
+      logMessage(mini.getFare(12)); // Example distance
+    }
+
+    function createSedan() {
+      const sedan = RideFactory("Sedan");
+      logMessage(sedan.getFare(15));
+    }
+
+    function createSUV() {
+      const suv = RideFactory("SUV");
+      logMessage(suv.getFare(18));
+    }
+
+    function createAuto() {
+      const auto = RideFactory("Auto");
+      logMessage(auto.getFare(10));
+    }
+  </script>
+</body>
+</html>
