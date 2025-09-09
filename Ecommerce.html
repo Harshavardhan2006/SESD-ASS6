@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>E-commerce App - Factory Pattern</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      padding: 20px;
+    }
+    h1 {
+      color: #9c27b0;
+    }
+    button {
+      padding: 10px 15px;
+      margin: 5px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .electronics-btn { background: #2196f3; color: white; }
+    .clothing-btn { background: #4caf50; color: white; }
+    .books-btn { background: #ff9800; color: white; }
+    .log {
+      margin-top: 20px;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .log p {
+      margin: 8px 0;
+      padding: 8px;
+      background: #f1f1f1;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>E-commerce App (Factory Demo)</h1>
+
+  <button class="electronics-btn" onclick="createElectronics()">Create Electronics</button>
+  <button class="clothing-btn" onclick="createClothing()">Create Clothing</button>
+  <button class="books-btn" onclick="createBooks()">Create Book</button>
+
+  <div class="log" id="log"></div>
+
+  <script>
+    // Factory function for products
+    function ProductFactory(type, name, price) {
+      switch(type) {
+        case "Electronics":
+          return {
+            type: "Electronics",
+            name,
+            price,
+            warranty: "1 Year",
+            getDetails() {
+              return `${this.type}: ${this.name} - ₹${this.price} (Warranty: ${this.warranty})`;
+            }
+          };
+        case "Clothing":
+          return {
+            type: "Clothing",
+            name,
+            price,
+            size: "M",
+            material: "Cotton",
+            getDetails() {
+              return `${this.type}: ${this.name} - ₹${this.price} (Size: ${this.size}, Material: ${this.material})`;
+            }
+          };
+        case "Books":
+          return {
+            type: "Book",
+            name,
+            price,
+            author: "Unknown Author",
+            getDetails() {
+              return `${this.type}: "${this.name}" - ₹${this.price} (Author: ${this.author})`;
+            }
+          };
+        default:
+          throw new Error("Invalid product type!");
+      }
+    }
+
+    const logDiv = document.getElementById("log");
+
+    function logMessage(msg) {
+      const p = document.createElement("p");
+      p.textContent = msg;
+      logDiv.appendChild(p);
+    }
+
+    // Create product examples
+    function createElectronics() {
+      const phone = ProductFactory("Electronics", "Smartphone", 15000);
+      logMessage(phone.getDetails());
+    }
+
+    function createClothing() {
+      const tshirt = ProductFactory("Clothing", "T-Shirt", 800);
+      logMessage(tshirt.getDetails());
+    }
+
+    function createBooks() {
+      const novel = ProductFactory("Books", "The Alchemist", 500);
+      novel.author = "Paulo Coelho";
+      logMessage(novel.getDetails());
+    }
+  </script>
+</body>
+</html>
